@@ -30,7 +30,6 @@ public class UserDao {
         }
     }
 
-    // Get user by email for login
     public User getUserByEmail(String email) {
         String query = "SELECT * FROM users WHERE email = ?";
 
@@ -49,7 +48,7 @@ public class UserDao {
         return null;  // No user found with the given email
     }
 
-    // Get user by ID for updating user profile
+
     public User getUserById(int userId) {
         String query = "SELECT * FROM users WHERE id = ?";
 
@@ -65,10 +64,9 @@ public class UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;  // No user found with the given ID
+        return null;
     }
 
-    // Update the user's details in the database
     public boolean updateUser(User user) {
         String query = "UPDATE users SET first_name = ?, last_name = ?, password = ? WHERE id = ?";
 

@@ -13,6 +13,7 @@
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
 
+
   <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>com.example.controller.LoginServlet</servlet-class>

@@ -1,8 +1,7 @@
 document.getElementById('register-form').addEventListener('submit', async function(event) {
     event.preventDefault();
 
-    // Fetch input values from the form
-    const firstName = document.getElementById('register-first-name').value;
+    const firstName = document.getElementById('register-first-name').value; // Make sure to use the correct ID
     const lastName = document.getElementById('register-last-name').value;
     const email = document.getElementById('register-email').value;
     const password = document.getElementById('register-password').value;
@@ -11,22 +10,17 @@ document.getElementById('register-form').addEventListener('submit', async functi
         const response = await fetch('http://localhost:8080/Login_System1/register', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded' 
+                'Content-Type': 'application/json'
             },
-            body: new URLSearchParams({
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                password: password
-            })
+            body: JSON.stringify({ first_name: firstName, last_name: lastName, email, password }) // Corrected naming
         });
 
         if (response.ok) {
             alert('Registration successful!');
-            window.location.href = 'login.html'; 
+            window.location.href = 'login.html';
         } else {
-            const errorData = await response.text();
-            alert(`Registration failed: ${errorData}`);
+            const errorText = await response.text();
+            alert(`Registration failed: ${errorText}`);
         }
     } catch (error) {
         console.error('Error:', error);

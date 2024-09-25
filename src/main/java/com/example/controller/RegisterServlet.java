@@ -17,22 +17,28 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Retrieve user input from the registration form
+        System.out.println("RegisterServlet doPost called.");
+
         String firstName = request.getParameter("first_name");
         String lastName = request.getParameter("last_name");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        // Attempt to register the user
-        boolean registrationSuccess = userService.registerUser(firstName, lastName, email, password);
-
-        // Check if registration was successful
-        if (registrationSuccess) {
-            response.sendRedirect(request.getContextPath() + "/frontend/pages/login.html");
-        } else {
-            request.setAttribute("error", "Email already exists or other issues.");
-            request.getRequestDispatcher("/frontend/pages/register.html").forward(request, response);
+        try {
+            boolean registrationSuccess = userService.registerUser(firstName, lastName, email, password);
+            if (registrationSuccess) {
+                response.setStatus(HttpServletResponse.SC_OK); // Set status 200
+                response.sendRedirect(request.getContextPath() + "/frontend/pages/login.html");
+            } else {
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST); // Set status 400
+                request.setAttribute("error", "Email already exists or other issues.");
+                request.getRequestDispatcher(request.getContextPath() + "/frontend/pages/register.html").forward(request, response);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Print error stack trace for debugging
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // Set status 500
+            response.getWriter().write("{\"message\":\"Internal Server Error\"}"); // Send JSON response
         }
     }
-
 }
+
