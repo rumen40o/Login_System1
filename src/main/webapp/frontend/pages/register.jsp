@@ -28,6 +28,10 @@
         
             <label for="register-password">Password:</label>
             <input type="password" id="register-password" name="password" required>
+
+            <label for="captcha">Enter the CAPTCHA shown below:</label>
+            <div><p>${captchaText}</p></div> 
+            <input type="text" id="captcha" name="captcha" required> 
         
             <button type="submit">Register</button>
         </form>

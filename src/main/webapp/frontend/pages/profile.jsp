@@ -1,24 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
 
-<!DOCTYPE html> 
-    <c:if test="${not empty errorMessage}">
-        <div class="error-message">${errorMessage}</div>
-    </c:if>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/css/login_register.css"> 
+</head>
 
-    <div class="form-container">
+<body>
+    <div class="container">
         <h2>User Profile</h2>
-<form action="${pageContext.request.contextPath}/api/profile" method="post">
-    <label>First Name:</label>
-    <input type="text" name="first_name" value="${user.firstName}" required />
 
-    <label>Last Name:</label>
-    <input type="text" name="last_name" value="${user.lastName}" required />
+        <!-- Display error message if it exists -->
+        <c:if test="${not empty errorMessage}">
+            <div class="error-message">${errorMessage}</div>
+        </c:if>
 
-    <label>Password:</label>
-    <input type="password" name="password" required />
+        <div class="form-container">
+            <form action="${pageContext.request.contextPath}/api/profile" method="post">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name" name="first_name" value="${user.firstName}" required />
 
-    <button type="submit">Save Changes</button>
-</form>
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name" name="last_name" value="${user.lastName}" required />
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required />
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+        <form action="${pageContext.request.contextPath}/api/logout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
     </div>
-</div>
 </body>
+
 </html>

@@ -1,34 +1,71 @@
 package com.example.controller;
 
-import service.UserService;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import service.UserService;
+
 import java.io.IOException;
+import java.util.Random;
 
 @WebServlet("/api/register")
 public class RegisterServlet extends HttpServlet {
     private UserService userService = new UserService();
 
     @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Generate CAPTCHA text
+        String captchaText = generateCaptchaText(); // Method to generate random text
+        HttpSession session = request.getSession();
+        session.setAttribute("captcha", captchaText); // Store CAPTCHA text in session
+        request.setAttribute("captchaText", captchaText); // Set for JSP display
+
+        request.getRequestDispatcher("/frontend/pages/register.jsp").forward(request, response);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        HttpSession session = request.getSession();
+        String captchaInput = request.getParameter("captcha");
+        String captchaSession = (String) session.getAttribute("captcha");
 
-        boolean registrationSuccess = userService.registerUser(firstName, lastName, email, password);
+        if (captchaSession != null && captchaSession.equals(captchaInput)) {
+            // CAPTCHA matches, proceed with registration
+            String firstName = request.getParameter("first_name");
+            String lastName = request.getParameter("last_name");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
 
-        if (registrationSuccess) {
-            // Redirect to login page after successful registration
-            response.sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
+            boolean registrationSuccess = userService.registerUser(firstName, lastName, email, password);
+
+            if (registrationSuccess) {
+                response.sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
+            } else {
+                request.setAttribute("errorMessage", "Registration failed. Email might already be taken.");
+                doGet(request, response); // Display form again with error
+            }
         } else {
-            // Set error message and forward back to the register.jsp page
-            request.setAttribute("errorMessage", "Email already exists or other issues.");
-            request.getRequestDispatcher("/frontend/pages/register.jsp").forward(request, response);
+            // CAPTCHA did not match
+            request.setAttribute("errorMessage", "Incorrect CAPTCHA. Please try again.");
+            doGet(request, response); // Display form again with error
         }
     }
+
+    private String generateCaptchaText() {
+        int leftLimit = 97;
+        int rightLimit = 122;
+        int targetStringLength = 6;
+        Random random = new Random();
+
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        return buffer.toString(); // Return generated CAPTCHA text
+    }
 }
+
