@@ -1,14 +1,5 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Profile</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/frontend/css/login_register.css">
-</head>
-<body>
-<div class="container">
-
+<!DOCTYPE html> 
     <c:if test="${not empty errorMessage}">
         <div class="error-message">${errorMessage}</div>
     </c:if>
