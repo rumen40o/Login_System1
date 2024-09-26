@@ -3,37 +3,39 @@ package com.example.controller;
 import model.User;
 import service.UserService;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet("/login")
+@WebServlet("/api/login") // Servlet mapping
 public class LoginServlet extends HttpServlet {
     private UserService userService = new UserService();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve user credentials from request
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
+        // Authenticate user
         User user = userService.loginUser(email, password);
 
         if (user != null) {
-            // User is authenticated
+            // If authentication is successful, create session
             HttpSession session = request.getSession();
-            session.setAttribute("loggedUser", user);
+            session.setAttribute("id", user.getId()); // Store user ID in session
+            session.setAttribute("loggedUser", user); // Store entire user object in session
 
-            // Redirect to the profile page
-            response.sendRedirect(request.getContextPath() + "/frontend/pages/profile.html");
+            // Redirect to the ProfileServlet instead of directly to JSP
+            response.sendRedirect(request.getContextPath() + "/api/profile");
         } else {
-            // User authentication failed
-            request.setAttribute("error", "Invalid email or password.");
-            // Forward to the login page, ensuring the context path is used
-            request.getRequestDispatcher(request.getContextPath() + "/frontend/pages/login.html").forward(request, response);
+            // If authentication fails, set error message and forward to login page
+            request.setAttribute("errorMessage", "Invalid email or password.");
+            request.getRequestDispatcher("/frontend/pages/login.jsp").forward(request, response);
         }
     }
 }
