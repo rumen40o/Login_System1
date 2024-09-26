@@ -17,11 +17,11 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Generate CAPTCHA text
-        String captchaText = generateCaptchaText(); // Method to generate random text
+
+        String captchaText = generateCaptchaText();
         HttpSession session = request.getSession();
-        session.setAttribute("captcha", captchaText); // Store CAPTCHA text in session
-        request.setAttribute("captchaText", captchaText); // Set for JSP display
+        session.setAttribute("captcha", captchaText);
+        request.setAttribute("captchaText", captchaText);
 
         request.getRequestDispatcher("/frontend/pages/register.jsp").forward(request, response);
     }
@@ -33,7 +33,7 @@ public class RegisterServlet extends HttpServlet {
         String captchaSession = (String) session.getAttribute("captcha");
 
         if (captchaSession != null && captchaSession.equals(captchaInput)) {
-            // CAPTCHA matches, proceed with registration
+
             String firstName = request.getParameter("first_name");
             String lastName = request.getParameter("last_name");
             String email = request.getParameter("email");
@@ -45,12 +45,12 @@ public class RegisterServlet extends HttpServlet {
                 response.sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
             } else {
                 request.setAttribute("errorMessage", "Registration failed. Email might already be taken.");
-                doGet(request, response); // Display form again with error
+                doGet(request, response);
             }
         } else {
             // CAPTCHA did not match
             request.setAttribute("errorMessage", "Incorrect CAPTCHA. Please try again.");
-            doGet(request, response); // Display form again with error
+            doGet(request, response);
         }
     }
 
@@ -65,7 +65,7 @@ public class RegisterServlet extends HttpServlet {
             int randomLimitedInt = leftLimit + (int) (random.nextFloat() * (rightLimit - leftLimit + 1));
             buffer.append((char) randomLimitedInt);
         }
-        return buffer.toString(); // Return generated CAPTCHA text
+        return buffer.toString();
     }
 }
 

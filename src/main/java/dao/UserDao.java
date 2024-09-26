@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 public class UserDao {
 
-    // Save a new user to the database
     public boolean saveUser(User user) {
         String query = "INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)";
         try (Connection conn = Database.getConnection();
@@ -19,7 +18,7 @@ public class UserDao {
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
             stmt.setString(3, user.getEmail());
-            stmt.setString(4, user.getPassword()); // Plaintext password for now
+            stmt.setString(4, user.getPassword());
 
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
@@ -29,7 +28,6 @@ public class UserDao {
         }
     }
 
-    // Retrieve a user by their email
     public User getUserByEmail(String email) {
         String query = "SELECT * FROM users WHERE email = ?";
         try (Connection conn = Database.getConnection();
@@ -53,7 +51,6 @@ public class UserDao {
         return null;
     }
 
-    // Retrieve a user by their ID
     public User getUserById(int userId) {
         User user = null;
         String sql = "SELECT id, first_name, last_name, password FROM users WHERE id = ?";
@@ -71,12 +68,11 @@ public class UserDao {
                 user.setPassword(rs.getString("password"));
             }
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle exceptions appropriately
+            e.printStackTrace();
         }
         return user;
     }
 
-    // Method to update the user
     public boolean updateUser(User user) {
         String sql = "UPDATE users SET first_name = ?, last_name = ?, password = ? WHERE id = ?";
 
@@ -84,13 +80,13 @@ public class UserDao {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, user.getFirstName());
             stmt.setString(2, user.getLastName());
-            stmt.setString(3, user.getPassword()); // Use plain password directly
+            stmt.setString(3, user.getPassword());
             stmt.setInt(4, user.getId());
             int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0; // Return true if the update was successful
+            return rowsUpdated > 0;
         } catch (SQLException e) {
-            e.printStackTrace(); // Handle exceptions appropriately
+            e.printStackTrace();
         }
-        return false; // Return false if the update failed
+        return false;
     }
 }

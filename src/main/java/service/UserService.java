@@ -8,39 +8,36 @@ public class UserService {
     private UserDao userDao;
 
     public UserService() {
-        this.userDao = new UserDao();  // Initializing the DAO
+        this.userDao = new UserDao();
     }
 
-    // Register a new user
+
     public boolean registerUser(String firstName, String lastName, String email, String password) {
-        // Validate the inputs (basic validation, can be extended)
+
         if (firstName == null || lastName == null || email == null || password == null ||
                 firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             return false;
         }
 
-        // Check if the user already exists
+
         if (userDao.getUserByEmail(email) != null) {
-            return false; // Email already exists
+            return false;
         }
 
-        // Create a new user and save it in the database
         User user = new User(firstName, lastName, email, password);
         return userDao.saveUser(user);
     }
 
-    // Authenticate a user by their email and password
     public User loginUser(String email, String password) {
         User user = userDao.getUserByEmail(email);
         if (user != null && user.getPassword().equals(password)) {
             return user;
         }
-        return null;  // Invalid credentials
+        return null;
     }
 
-
     public User getUserById(int userId) {
-        return userDao.getUserById(userId); // Implement this method in UserDao to fetch user by ID
+        return userDao.getUserById(userId);
     }
 
     public boolean updateUser(int userId, String newFirstName, String newLastName, String newPassword) {
@@ -54,9 +51,9 @@ public class UserService {
                 user.setLastName(newLastName);
             }
             if (newPassword != null && !newPassword.isEmpty()) {
-                user.setPassword(newPassword); // Password change
+                user.setPassword(newPassword);
             }
-            return userDao.updateUser(user); // Update in the database
+            return userDao.updateUser(user);
         }
         return false;
     }

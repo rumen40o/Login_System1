@@ -12,7 +12,6 @@
     <div class="container">
         <h2>User Profile</h2>
 
-        <!-- Display error message if it exists -->
         <c:if test="${not empty errorMessage}">
             <div class="error-message">${errorMessage}</div>
         </c:if>

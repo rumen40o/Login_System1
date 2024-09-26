@@ -10,7 +10,6 @@
 <div class="container">
     <h2>Register</h2>
 
-    <!-- Check if an error message is passed from the servlet -->
     <c:if test="${not empty errorMessage}">
         <div class="error-message">${errorMessage}</div>
     </c:if>
