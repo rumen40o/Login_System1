@@ -8,23 +8,23 @@ public class User {
     private String email;
     private String password;
 
-
     public User(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+        setFirstName(firstName); // Using the setter for validation
+        setLastName(lastName);   // Using the setter for validation
+        setEmail(email);         // Using the setter for validation
+        setPassword(password);   // Using the setter for validation
     }
+
     public User(int id, String firstName, String lastName, String email, String password) {
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+        setFirstName(firstName); // Using the setter for validation
+        setLastName(lastName);   // Using the setter for validation
+        setEmail(email);         // Using the setter for validation
+        setPassword(password);   // Using the setter for validation
     }
 
     public User() {
-
+        // Default constructor
     }
 
     public int getId() {
@@ -40,6 +40,9 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
+        if (firstName == null || firstName.trim().isEmpty()) {
+            throw new IllegalArgumentException("First name cannot be null or empty");
+        }
         this.firstName = firstName;
     }
 
@@ -48,6 +51,9 @@ public class User {
     }
 
     public void setLastName(String lastName) {
+        if (lastName == null || lastName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Last name cannot be null or empty");
+        }
         this.lastName = lastName;
     }
 
@@ -56,6 +62,9 @@ public class User {
     }
 
     public void setEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
         this.email = email;
     }
 
@@ -64,6 +73,9 @@ public class User {
     }
 
     public void setPassword(String password) {
+        if (password == null || password.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
         this.password = password;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +15,10 @@ import java.io.IOException;
 @WebServlet("/api/profile")
 public class ProfileServlet extends HttpServlet {
     private UserService userService = new UserService();
+
+    public void setUserService(UserService userService) {
+        this.userService = userService; // setter for testing
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,16 +53,18 @@ public class ProfileServlet extends HttpServlet {
             boolean isUpdated = userService.updateUser(userId, newFirstName, newLastName, newPassword);
 
             if (isUpdated) {
-
                 User updatedUser = userService.getUserById(userId);
                 session.setAttribute("id", updatedUser.getId());
                 response.sendRedirect(request.getContextPath() + "/api/profile?updateSuccess=true");
             } else {
+                // Update this part to forward instead of calling doGet
                 request.setAttribute("errorMessage", "Failed to update profile. Please try again.");
-                doGet(request, response);
+                RequestDispatcher requestDispatcher = request.getRequestDispatcher("/frontend/pages/profile.jsp");
+                requestDispatcher.forward(request, response); // Use forward here
             }
         } else {
             response.sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
         }
     }
+
 }

@@ -15,6 +15,14 @@ import java.util.Random;
 public class RegisterServlet extends HttpServlet {
     private UserService userService = new UserService();
 
+    public RegisterServlet(UserService userService) {
+        this.userService = userService;
+    }
+    public RegisterServlet() {
+        this.userService = new UserService(); // Default behavior
+    }
+
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -54,9 +62,9 @@ public class RegisterServlet extends HttpServlet {
         }
     }
 
-    private String generateCaptchaText() {
-        int leftLimit = 97;
-        int rightLimit = 122;
+    protected String generateCaptchaText() {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
         int targetStringLength = 6;
         Random random = new Random();
 
@@ -67,5 +75,7 @@ public class RegisterServlet extends HttpServlet {
         }
         return buffer.toString();
     }
+
+
 }
 

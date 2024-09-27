@@ -10,6 +10,9 @@ public class UserService {
     public UserService() {
         this.userDao = new UserDao();
     }
+    public UserService(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
 
     public boolean registerUser(String firstName, String lastName, String email, String password) {
