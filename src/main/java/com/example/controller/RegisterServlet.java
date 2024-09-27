@@ -19,7 +19,7 @@ public class RegisterServlet extends HttpServlet {
         this.userService = userService;
     }
     public RegisterServlet() {
-        this.userService = new UserService(); // Default behavior
+        this.userService = new UserService();
     }
 
 
@@ -63,8 +63,8 @@ public class RegisterServlet extends HttpServlet {
     }
 
     protected String generateCaptchaText() {
-        int leftLimit = 97; // letter 'a'
-        int rightLimit = 122; // letter 'z'
+        int leftLimit = 97;
+        int rightLimit = 122;
         int targetStringLength = 6;
         Random random = new Random();
 

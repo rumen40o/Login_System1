@@ -17,7 +17,7 @@ public class ProfileServlet extends HttpServlet {
     private UserService userService = new UserService();
 
     public void setUserService(UserService userService) {
-        this.userService = userService; // setter for testing
+        this.userService = userService;
     }
 
     @Override

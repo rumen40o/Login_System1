@@ -15,7 +15,7 @@ class DatabaseTest {
         try {
             Connection connection = Database.getConnection();
             assertNotNull(connection, "Connection should not be null");
-            connection.close(); // Always close the connection after use
+            connection.close();
         } catch (SQLException e) {
             e.printStackTrace();
             assert false : "Connection failed: " + e.getMessage();

@@ -21,64 +21,63 @@ import static org.mockito.Mockito.*;
 public class LoginServletTest {
 
     @InjectMocks
-    private LoginServlet loginServlet; // The servlet under test
+    private LoginServlet loginServlet;
 
     @Mock
-    private UserService userService; // Mocking the UserService
+    private UserService userService;
 
     @Mock
-    private HttpServletRequest request; // Mocking HttpServletRequest
+    private HttpServletRequest request;
 
     @Mock
-    private HttpServletResponse response; // Mocking HttpServletResponse
+    private HttpServletResponse response;
 
     @Mock
-    private HttpSession session; // Mocking HttpSession
+    private HttpSession session;
 
     @Mock
-    private RequestDispatcher requestDispatcher; // Mocking RequestDispatcher for forwarding
+    private RequestDispatcher requestDispatcher;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this); // Initialize mocks
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testDoPost_LoginSuccessful() throws Exception {
-        // Arrange
+
         String email = "test@example.com";
         String password = "password123";
-        User user = new User("John", "Doe", email, password); // Using the correct User constructor
+        User user = new User("John", "Doe", email, password);
 
         when(request.getParameter("email")).thenReturn(email);
         when(request.getParameter("password")).thenReturn(password);
-        when(userService.loginUser(email, password)).thenReturn(user); // Mocking login success
+        when(userService.loginUser(email, password)).thenReturn(user);
         when(request.getSession()).thenReturn(session);
 
-        // Act
+
         loginServlet.doPost(request, response);
 
-        // Assert
-        verify(session).setAttribute("id", user.getId());  // Assuming getId() method exists
+        verify(session).setAttribute("id", user.getId());
         verify(session).setAttribute("loggedUser", user);
         verify(response).sendRedirect(request.getContextPath() + "/api/profile");
     }
 
     @Test
     public void testDoPost_LoginFailed() throws Exception {
-        // Arrange
+
         String email = "test@example.com";
         String password = "wrongpassword";
 
         when(request.getParameter("email")).thenReturn(email);
         when(request.getParameter("password")).thenReturn(password);
-        when(userService.loginUser(email, password)).thenReturn(null); // Mocking login failure
+        when(userService.loginUser(email, password)).thenReturn(null);
         when(request.getRequestDispatcher("/frontend/pages/login.jsp")).thenReturn(requestDispatcher);
 
-        // Act
+
         loginServlet.doPost(request, response);
 
-        // Assert
+
         verify(request).setAttribute("errorMessage", "Invalid email or password.");
         verify(requestDispatcher).forward(request, response);
     }

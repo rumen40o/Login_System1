@@ -17,7 +17,7 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         userDao = mock(UserDao.class);
-        userService = new UserService(userDao); // Assuming constructor injection
+        userService = new UserService(userDao);
     }
 
     @Test
@@ -33,7 +33,6 @@ class UserServiceTest {
         boolean result = userService.registerUser(firstName, lastName, email, password);
         assertTrue(result);
 
-        // Capture the User object passed to saveUser
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(userDao).saveUser(userCaptor.capture());
 
@@ -136,9 +135,9 @@ class UserServiceTest {
         when(userDao.updateUser(existingUser)).thenReturn(true);
 
         boolean result = userService.updateUser(1, null, null, null);
-        assertTrue(result); // Should return true since we are not changing anything
-        assertEquals("John", existingUser.getFirstName()); // No change
-        assertEquals("Doe", existingUser.getLastName()); // No change
-        assertEquals("password123", existingUser.getPassword()); // No change
+        assertTrue(result);
+        assertEquals("John", existingUser.getFirstName());
+        assertEquals("Doe", existingUser.getLastName());
+        assertEquals("password123", existingUser.getPassword());
     }
 }

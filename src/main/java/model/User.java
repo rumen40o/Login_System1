@@ -9,18 +9,18 @@ public class User {
     private String password;
 
     public User(String firstName, String lastName, String email, String password) {
-        setFirstName(firstName); // Using the setter for validation
-        setLastName(lastName);   // Using the setter for validation
-        setEmail(email);         // Using the setter for validation
-        setPassword(password);   // Using the setter for validation
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPassword(password);
     }
 
     public User(int id, String firstName, String lastName, String email, String password) {
         this.id = id;
-        setFirstName(firstName); // Using the setter for validation
-        setLastName(lastName);   // Using the setter for validation
-        setEmail(email);         // Using the setter for validation
-        setPassword(password);   // Using the setter for validation
+        setFirstName(firstName);
+        setLastName(lastName);
+        setEmail(email);
+        setPassword(password);
     }
 
     public User() {

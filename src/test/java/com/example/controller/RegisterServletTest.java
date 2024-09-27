@@ -20,41 +20,38 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class RegisterServletTest {
 
-    private RegisterServlet registerServlet; // The servlet under test
+    private RegisterServlet registerServlet;
 
     @Mock
-    private HttpServletRequest request; // Mocked request
+    private HttpServletRequest request;
 
     @Mock
-    private HttpServletResponse response; // Mocked response
+    private HttpServletResponse response;
 
     @Mock
-    private HttpSession session; // Mocked session
+    private HttpSession session;
 
     @Mock
-    private UserService userService; // Mocked UserService
+    private UserService userService;
 
     @BeforeEach
     public void setup() {
-        MockitoAnnotations.openMocks(this); // Initializes the mocks
-        when(request.getSession()).thenReturn(session); // Setup session mock
-        registerServlet = new RegisterServlet(userService); // Inject the mock UserService
+        MockitoAnnotations.openMocks(this);
+        when(request.getSession()).thenReturn(session);
+        registerServlet = new RegisterServlet(userService);
     }
 
     @Test
     public void testDoGet() throws Exception {
-        // Mock the RequestDispatcher
+
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
         when(request.getRequestDispatcher("/frontend/pages/register.jsp")).thenReturn(dispatcher);
 
-        // Execute the doGet method
         registerServlet.doGet(request, response);
 
-        // Verify that the CAPTCHA is set in the session
         verify(session).setAttribute(eq("captcha"), any(String.class));
 
-        // Verify that the correct view is forwarded
-        verify(dispatcher).forward(request, response); // Ensure forward is called
+        verify(dispatcher).forward(request, response);
     }
 
     @Test
@@ -76,19 +73,16 @@ public class RegisterServletTest {
 
     @Test
     public void testDoPost_InvalidCaptcha() throws Exception {
-        // Arrange: Set up the necessary mock behaviors
+
         when(request.getParameter("captcha")).thenReturn("wrongCaptcha");
         when(session.getAttribute("captcha")).thenReturn("abcd12");
 
-        // Mock the RequestDispatcher
         RequestDispatcher dispatcher = mock(RequestDispatcher.class);
         when(request.getRequestDispatcher("/frontend/pages/register.jsp")).thenReturn(dispatcher);
 
-        // Act: Call the method under test
         registerServlet.doPost(request, response);
 
-        // Assert: Verify the expected behavior
         verify(request).setAttribute("errorMessage", "Incorrect CAPTCHA. Please try again.");
-        verify(dispatcher).forward(request, response); // Ensure forward is called
+        verify(dispatcher).forward(request, response);
     }
 }

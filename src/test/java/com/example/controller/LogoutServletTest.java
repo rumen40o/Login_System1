@@ -18,56 +18,54 @@ import static org.mockito.Mockito.*;
 public class LogoutServletTest {
 
     @InjectMocks
-    private LogoutServlet logoutServlet; // The servlet under test
+    private LogoutServlet logoutServlet;
 
     @Mock
-    private HttpServletRequest request; // Mocking HttpServletRequest
+    private HttpServletRequest request;
 
     @Mock
-    private HttpServletResponse response; // Mocking HttpServletResponse
+    private HttpServletResponse response;
 
     @Mock
-    private HttpSession session; // Mocking HttpSession
+    private HttpSession session;
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.openMocks(this); // Initialize mocks
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void testDoPost_SessionExists() throws Exception {
-        // Arrange
-        when(request.getSession(false)).thenReturn(session); // Mocking an existing session
 
-        // Act
+        when(request.getSession(false)).thenReturn(session);
+
+
         logoutServlet.doPost(request, response);
 
-        // Assert
-        verify(session).invalidate(); // Verify that session.invalidate() was called
-        verify(response).sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp"); // Verify redirection
+
+        verify(session).invalidate();
+        verify(response).sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
     }
 
     @Test
     public void testDoPost_SessionDoesNotExist() throws Exception {
-        // Arrange
-        when(request.getSession(false)).thenReturn(null); // Mocking no session existing
 
-        // Act
+        when(request.getSession(false)).thenReturn(null);
+
+
         logoutServlet.doPost(request, response);
 
-        // Assert
-        verify(session, never()).invalidate(); // Verify that session.invalidate() was not called
-        verify(response).sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp"); // Verify redirection
+
+        verify(session, never()).invalidate();
+        verify(response).sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
     }
 
     @Test
     public void testDoGet() throws Exception {
-        // Act
+
         logoutServlet.doGet(request, response);
 
-        // Assert
-        // Verify that the doGet method calls doPost internally
-        verify(request).getSession(false); // It should trigger the same logic as doPost
+        verify(request).getSession(false);
         verify(response).sendRedirect(request.getContextPath() + "/frontend/pages/login.jsp");
     }
 }

@@ -30,28 +30,27 @@ public class UserDaoTest {
 
     private UserDao userDao;
 
-    private MockedStatic<Database> mockedDatabase; // Declare the static mock
+    private MockedStatic<Database> mockedDatabase;
 
     @BeforeEach
     public void setUp() throws SQLException {
         MockitoAnnotations.openMocks(this);
         userDao = new UserDao();
 
-        // Mock Database class to return mock connection
-        mockedDatabase = mockStatic(Database.class); // Create static mock here
+        mockedDatabase = mockStatic(Database.class);
         mockedDatabase.when(Database::getConnection).thenReturn(mockConnection);
     }
 
     @AfterEach
     public void tearDown() {
         if (mockedDatabase != null) {
-            mockedDatabase.close(); // Close the static mock to deregister it
+            mockedDatabase.close();
         }
     }
 
     @Test
     public void testSaveUser() throws SQLException {
-        // Arrange
+
         User user = new User();
         user.setFirstName("John");
         user.setLastName("Doe");
@@ -61,10 +60,8 @@ public class UserDaoTest {
         when(mockConnection.prepareStatement(any(String.class))).thenReturn(mockPreparedStatement);
         when(mockPreparedStatement.executeUpdate()).thenReturn(1);
 
-        // Act
         boolean result = userDao.saveUser(user);
 
-        // Assert
         assertTrue(result);
         verify(mockPreparedStatement).setString(1, user.getFirstName());
         verify(mockPreparedStatement).setString(2, user.getLastName());

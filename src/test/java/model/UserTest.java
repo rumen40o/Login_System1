@@ -79,5 +79,4 @@ class UserTest {
         assertEquals("Password cannot be null or empty", exception.getMessage());
     }
 
-    // You can add more tests for edge cases as necessary
 }
